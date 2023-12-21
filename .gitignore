@@ -1,2 +1,4 @@
 **/__pycache__/
 .tvtvo/
+*.wav
+test-*.mp4
