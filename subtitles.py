@@ -1,13 +1,15 @@
 from datetime import timedelta
 from typing import Union
 
-from pysrt import SubRipFile, SubRipItem, SubRipTime
+from pysrt import SubRipFile, SubRipItem
 
 
 def save_to_srt(transctipt: list[dict[str, Union[float, str]]], output: str):
     items = [create_subripitem(segment) for segment in transctipt]
     subtitles = SubRipFile(items)
-    subtitles.save(output if ".txt" in output else f"{output}.srt")
+    output_file = output if ".txt" in output else f"{output}.srt"
+    subtitles.save(output_file)
+    print(f"translated transcription saved to {output_file}")
 
 
 def create_subripitem(segment: dict[str, Union[float, str]]) -> SubRipItem:
