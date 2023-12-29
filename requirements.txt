@@ -1,4 +1,6 @@
-TTS
-
+numpy
+scipy
 ffmpeg-python
+openai-whisper
+TTS
 pydub
