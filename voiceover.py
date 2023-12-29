@@ -34,7 +34,7 @@ def get_video_length(filename: str) -> Union[int, None]:
         return None
 
 
-def load_wav_to_buffer(base_audio):
+def load_wav_to_buffer(base_audio) -> BytesIO:
     audio_bytes = BytesIO()
     base_audio.export(audio_bytes, format="wav")
     audio_bytes.seek(0)
@@ -68,41 +68,4 @@ def add_audio_to_video(
         map="[aout]",
         filter_complex=filter_complex,
     ).run(input=audio_bytes.read())
-
-
-# if __name__ == "__main__":
-#     import tts
-
-#     VIDEO_PATH = "test.mp4"
-#     TEXT1, TEXT1_TIMESTAMP = "Extremely silly, full time goofy. shenanigans.", 1000
-#     TEXT2, TEXT2_TIMESTAMP = "undoubtedly", 7500
-
-#     audio1, sr = tts.synthesize(TEXT1)
-#     audio2, sr = tts.synthesize(TEXT2)
-
-#     audio1 = numpy_to_pydub_audiosegment(audio1, sr)
-#     audio2 = numpy_to_pydub_audiosegment(audio2, sr)
-
-#     video_length = get_video_length(VIDEO_PATH)
-#     audio = AudioSegment.silent(duration=video_length)
-#     print(f"video length: {video_length}")
-
-#     for segment, timestamp in zip([audio1, audio2], [TEXT1_TIMESTAMP, TEXT2_TIMESTAMP]):
-#         audio = audio.overlay(segment, position=timestamp)
-
-#     audio_bytes = BytesIO()
-#     audio.export(audio_bytes, format="wav")
-#     audio_bytes.seek(0)
-
-#     video = ffmpeg.input(VIDEO_PATH)
-#     audio = ffmpeg.input("pipe:0", format="wav", thread_queue_size=512)
-#     filter_complex = "[0:a][1:a]amix=inputs=2:duration=longest[aout]"
-#     ffmpeg.output(
-#         video.video,
-#         audio,
-#         "test-out2.mp4",
-#         vcodec="copy",
-#         acodec="aac",
-#         map="[aout]",
-#         **{"filter_complex": filter_complex},
-#     ).run(input=audio_bytes.read())
+    print(f"Video with overlaid audio saved to {out_video_filename}")

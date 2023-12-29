@@ -21,7 +21,7 @@ tts = TTS(model).to(device)
 
 def synthesize(
     text: str, *, speaker: str = "myself", voice_dir: str = "voices/", **kwargs
-) -> tuple[np.ndarray, int]:
+) -> tuple[int, np.ndarray]:
     wav = tts.tts(text=text, voice_dir=voice_dir, speaker=speaker, **kwargs)
     sample_rate = 24000  # TODO: get this from tts model
     if torch.is_tensor(wav):
@@ -29,7 +29,7 @@ def synthesize(
     if isinstance(wav, list):
         wav = np.array(wav)
 
-    return normalize(wav), sample_rate
+    return sample_rate, normalize(wav)
 
 
 def normalize(wav: np.ndarray) -> np.ndarray:
