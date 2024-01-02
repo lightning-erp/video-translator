@@ -1,6 +1,7 @@
 **/__pycache__/
 .tvtvo/
 *.wav
+*.mp3
 *.mp4
-videos/
+*.txt
 **/.pytest_cache

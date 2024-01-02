@@ -1,6 +1,13 @@
+import os
+import sys
+
+main_folder_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, main_folder_path)
+
+
 import pysrt
 
-from ..subtitles import seconds_to_hms
+from subtitles import seconds_to_hms
 
 
 def test_time_parsing_for_pysrt():
