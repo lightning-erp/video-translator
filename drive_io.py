@@ -17,9 +17,12 @@ def list_videos(directory: str) -> list[str]:
 def copy_directory_structure(in_directory: str, out_directory: str):
     for path, directories, files in os.walk(in_directory):
         for dir in [directory for directory in directories]:
-            # print(path, directories, dir)
-            print(os.path.join(path.replace(in_directory, out_directory), dir))
-            os.makedirs(os.path.join(path.replace(in_directory, out_directory), dir))
+            try:
+                os.makedirs(
+                    os.path.join(path.replace(in_directory, out_directory), dir)
+                )
+            except FileExistsError:
+                pass
 
 
 def extract_mp3(mp4_path: str) -> np.ndarray:
