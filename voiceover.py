@@ -1,3 +1,4 @@
+import os
 from io import BytesIO
 from typing import Union
 
@@ -59,6 +60,9 @@ def add_audio_to_video(
     video = ffmpeg.input(in_video_filename)
     audio = ffmpeg.input("pipe:0", format="wav", thread_queue_size=512)
     filter_complex = "[0:a][1:a]amix=inputs=2:duration=longest[aout]"
+    path = out_video_filename.split(".")[0]
+    if not os.path.isdir(path):
+        os.mkdir(path)
     ffmpeg.output(
         video.video,
         audio,

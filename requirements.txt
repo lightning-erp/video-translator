@@ -4,3 +4,4 @@ ffmpeg-python
 openai-whisper
 TTS
 pydub
+librosa
