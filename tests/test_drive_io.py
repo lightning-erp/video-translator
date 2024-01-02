@@ -14,14 +14,14 @@ OUT_DIRECTORY = os.path.join(main_folder_path, "tests", "directories_test_dir", 
 
 
 @pytest.fixture
-def setup_teardown_test_directory():
+def test_copy_directory_structure_fixture():
     yield IN_DIRECTORY, OUT_DIRECTORY
 
     shutil.rmtree(OUT_DIRECTORY)
 
 
-def test_copy_directory_structure(setup_teardown_test_directory):
-    in_directory, out_directory = setup_teardown_test_directory
+def test_copy_directory_structure(test_copy_directory_structure_fixture):
+    in_directory, out_directory = test_copy_directory_structure_fixture
     copy_directory_structure(in_directory, out_directory)
 
     in_dir = set()
@@ -40,9 +40,9 @@ def test_list_videos():
         [
             os.path.join(IN_DIRECTORY, file)
             for file in [
-                os.path.join("dir1", "Intro1.mp4"),
-                os.path.join("dir2", "Intro2.mp4"),
-                os.path.join("dir1", "subdir1_1", "Intro1_1.mp4"),
+                os.path.join("dir1", "test1"),
+                os.path.join("dir2", "test2"),
+                os.path.join("dir1", "subdir1_1", "test1_1"),
             ]
         ]
     )
