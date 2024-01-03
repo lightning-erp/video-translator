@@ -29,7 +29,7 @@ def get_video_length(filename: str) -> Union[int, None]:
             return duration
         else:
             print(f"No video stream found in file {filename}.")
-            return None
+            return 0
     except ffmpeg.Error as e:
         print(e)
         return None
