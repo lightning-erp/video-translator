@@ -30,13 +30,24 @@ def test_time_parsing_over_1h():
     assert time_parsed == "1:19:21.300000"
 
 
-def test_creating_subripitem():
+def test_creating_subripitem_no_millis():
     start = 21.0
     end = 71.0
     srt = pysrt.SubRipItem(
         start=seconds_to_hms(start), end=seconds_to_hms(end), text=""
     )
-    assert srt.duration == f"00:00:50,000"
+    assert srt.duration == pysrt.SubRipTime(0, 0, 50, 0)
+
+
+# def test_creating_subripitem_with_millis():
+#     start = 21.0
+#     end = 71.9
+#     srt = pysrt.SubRipItem(
+#         start=seconds_to_hms(start), end=seconds_to_hms(end), text=""
+#     )
+#     time = pysrt.SubRipTime(seconds=50, milliseconds=900)
+#     assert srt.duration == time
+#     assert srt.duration.milliseconds == 900
 
 
 @pytest.fixture
