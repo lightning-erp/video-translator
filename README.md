@@ -19,7 +19,7 @@ Training Video Translation and Voiceover tool based on OpenAI's Whisper for voic
 I will create `.exe` file when the project is finished.
 ### Command line:
 1. Move videos or folders with videos in `.mp4` format to `your/installation/folder/videos/in/`. The system can handle nested folders.
-2. Run the following command from `your/installation/folder/`:
+2. Activate the virtual envrionment and run the following command from `your/installation/folder/`:
     * Windows: `py main.py`
     * Linix: `python main.py`
 3. Get the ourput videos and subtitles from `your/installation/folder/videos/out/`.
