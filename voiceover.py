@@ -43,18 +43,16 @@ def load_wav_to_buffer(base_audio) -> BytesIO:
 
 
 def add_audio_to_video(
-    audios: list[np.ndarray],
+    audios: list[tuple[int, np.ndarray]],
     timestamps: list[int],
     in_video_filename: str,
     out_video_filename: str = "out.mp4",
-    *,
-    sample_rate: int = 24000,
 ) -> None:
     assert len(audios) == len(timestamps)
     video_length = get_video_length(in_video_filename)
     base_audio = AudioSegment.silent(duration=video_length)
-    for audio, timestamp in zip(audios, timestamps):
-        audio = numpy_to_pydub_audiosegment(audio, sample_rate)
+    for (fs, audio), timestamp in zip(audios, timestamps):
+        audio = numpy_to_pydub_audiosegment(audio, fs)
         base_audio = base_audio.overlay(audio, position=timestamp)
     audio_bytes = load_wav_to_buffer(base_audio)
     video = ffmpeg.input(in_video_filename)
@@ -62,7 +60,7 @@ def add_audio_to_video(
     filter_complex = "[0:a][1:a]amix=inputs=2:duration=longest[aout]"
     path = out_video_filename.split(".")[0]
     if not os.path.isdir(path):
-        os.mkdir(path)
+        os.makedirs(path)
     ffmpeg.output(
         video.video,
         audio,
