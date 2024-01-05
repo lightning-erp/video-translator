@@ -1,5 +1,6 @@
 import os
 
+
 import tts
 from drive_io import copy_directory_structure, extract_mp3, list_videos
 from subtitles import save_to_srt
@@ -27,5 +28,5 @@ if __name__ == "__main__":
         add_audio_to_video(
             *zip(*audios_with_timestamps),
             f"{filename}.mp4",
-            os.path.join(OUT_DIRECTORY, f"{filename}.{extension}"),
+            filename.replace(IN_DIRECTORY, OUT_DIRECTORY),
         )

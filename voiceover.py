@@ -45,29 +45,29 @@ def load_wav_to_buffer(base_audio) -> BytesIO:
 def add_audio_to_video(
     audios: list[tuple[int, np.ndarray]],
     timestamps: list[int],
-    in_video_filename: str,
-    out_video_filename: str = "out.mp4",
+    input_file: str,
+    output_file: str,
 ) -> None:
     assert len(audios) == len(timestamps)
-    video_length = get_video_length(in_video_filename)
+    video_length = get_video_length(input_file)
     base_audio = AudioSegment.silent(duration=video_length)
     for (fs, audio), timestamp in zip(audios, timestamps):
         audio = numpy_to_pydub_audiosegment(audio, fs)
         base_audio = base_audio.overlay(audio, position=timestamp)
     audio_bytes = load_wav_to_buffer(base_audio)
-    video = ffmpeg.input(in_video_filename)
+    video = ffmpeg.input(input_file)
     audio = ffmpeg.input("pipe:0", format="wav", thread_queue_size=512)
     filter_complex = "[0:a][1:a]amix=inputs=2:duration=longest[aout]"
-    path = out_video_filename.split(".")[0]
-    if not os.path.isdir(path):
-        os.makedirs(path)
+    output_file_path = "/".join(output_file.split("/")[:-1])
+    if not os.path.isdir(output_file_path):
+        os.makedirs(output_file_path)
     ffmpeg.output(
         video.video,
         audio,
-        out_video_filename,
+        f"{output_file}.mp4",
         vcodec="copy",
         acodec="aac",
         map="[aout]",
         filter_complex=filter_complex,
     ).run(input=audio_bytes.read())
-    print(f"Video with overlaid audio saved to {out_video_filename}")
+    print(f"Video with overlaid audio saved to {output_file}")
