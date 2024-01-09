@@ -6,6 +6,7 @@ import ffmpeg
 import numpy as np
 from pydub import AudioSegment
 from scipy.io import wavfile
+from pathlib import Path
 
 
 def numpy_to_pydub_audiosegment(input: np.ndarray, sample_rate: int) -> AudioSegment:
@@ -58,13 +59,13 @@ def add_audio_to_video(
     video = ffmpeg.input(input_file)
     audio = ffmpeg.input("pipe:0", format="wav", thread_queue_size=512)
     filter_complex = "[0:a][1:a]amix=inputs=2:duration=longest[aout]"
-    output_file_path = "/".join(output_file.split("/")[:-1])
-    if not os.path.isdir(output_file_path):
-        os.makedirs(output_file_path)
+    output_file_dir = os.path.dirname(output_file)
+    if not os.path.isdir(output_file_dir):
+        os.makedirs(output_file_dir)
     ffmpeg.output(
         video.video,
         audio,
-        f"{output_file}.mp4",
+        output_file,
         vcodec="copy",
         acodec="aac",
         map="[aout]",

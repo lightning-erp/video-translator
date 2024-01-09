@@ -20,10 +20,17 @@ tts = TTS(model).to(device)
 
 
 def synthesize(
-    text: str, *, speaker: str = "myself", voice_dir: str = "voices/", **kwargs
+    text: str,
+    *,
+    speed: float = None,
+    speaker: str = "myself",
+    voice_dir: str = "voices/",
+    **kwargs
 ) -> tuple[int, np.ndarray]:
-    wav = tts.tts(text=text, voice_dir=voice_dir, speaker=speaker, **kwargs)
-    sample_rate = 24000  # TODO: get this from tts model
+    wav = tts.tts(
+        text=text, voice_dir=voice_dir, speaker=speaker, speed=speed, **kwargs
+    )
+    sample_rate = 24000  # TODO: get from tts model
     if torch.is_tensor(wav):
         wav = wav.cpu().numpy()
     if isinstance(wav, list):

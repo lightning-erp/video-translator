@@ -7,7 +7,7 @@ import pytest
 main_folder_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, main_folder_path)
 
-from drive_io import copy_directory_structure, list_videos
+from drive_io import copy_directory_structure, dont_skip_dir, list_videos
 
 IN_DIRECTORY = os.path.join(main_folder_path, "tests", "directories_test_dir", "in")
 OUT_DIRECTORY = os.path.join(main_folder_path, "tests", "directories_test_dir", "out")
@@ -15,12 +15,15 @@ OUT_DIRECTORY = os.path.join(main_folder_path, "tests", "directories_test_dir", 
 
 @pytest.fixture
 def test_copy_directory_structure_fixture():
+    try:
+        shutil.rmtree(OUT_DIRECTORY)
+    except FileNotFoundError:
+        pass
+
     yield IN_DIRECTORY, OUT_DIRECTORY
 
-    shutil.rmtree(OUT_DIRECTORY)
 
-
-def test_copy_directory_structure(test_copy_directory_structure_fixture):
+def test_copy_directory_structure_no_skip(test_copy_directory_structure_fixture):
     in_directory, out_directory = test_copy_directory_structure_fixture
     copy_directory_structure(in_directory, out_directory)
 
@@ -30,8 +33,48 @@ def test_copy_directory_structure(test_copy_directory_structure_fixture):
     out_dir = set()
     for path, directories, files in os.walk(out_directory):
         out_dir.add(path.replace(out_directory, ""))
-    print(in_dir, out_dir)
     assert in_dir == out_dir
+
+
+def test_copy_directory_structure_with_skip(test_copy_directory_structure_fixture):
+    in_directory, out_directory = test_copy_directory_structure_fixture
+    skip_dirs = ["source", "subtitles"]
+    copy_directory_structure(in_directory, out_directory, to_skip=skip_dirs)
+
+    in_dir = set()
+    for path, directories, files in os.walk(in_directory):
+        if dont_skip_dir(skip_dirs, path):
+            in_dir.add(path.replace(in_directory, ""))
+    out_dir = set()
+    for path, directories, files in os.walk(out_directory):
+        out_dir.add(path.replace(out_directory, ""))
+    assert in_dir == out_dir
+
+
+def test_dont_skip_dir():
+    assert dont_skip_dir([], "any string here will work") == True
+    assert (
+        dont_skip_dir(["Subtitles"], os.path.join("dir", "to", "not", "skip")) == True
+    )
+    assert (
+        dont_skip_dir(["Subtitles"], os.path.join("dir", "to", "skip", "subtitles"))
+        == False
+    )
+    assert (
+        dont_skip_dir(["subtitles"], os.path.join("dir", "to", "skip", "Subtitles"))
+        == False
+    )
+    assert (
+        dont_skip_dir(["Subtitles"], os.path.join("dir", "to", "skip", "Subtitles"))
+        == False
+    )
+    assert (
+        dont_skip_dir(
+            ["subtitles", "source"],
+            "D:/Lightning videos/Szkolenia/M3 Supply chain/Szkolenie M3 Logistyka blok 1 - podstawy systemu\\Supply chain 1 - basics (pl).mp4",
+        )
+        == True
+    )
 
 
 def test_list_videos():

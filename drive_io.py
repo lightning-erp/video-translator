@@ -14,15 +14,21 @@ def list_videos(directory: str) -> list[str]:
     return videos
 
 
-def copy_directory_structure(in_directory: str, out_directory: str):
+def copy_directory_structure(
+    in_directory: str, out_directory: str, *, to_skip: list[str] = []
+):
     for path, directories, files in os.walk(in_directory):
         for dir in [directory for directory in directories]:
             try:
-                os.makedirs(
-                    os.path.join(path.replace(in_directory, out_directory), dir)
-                )
+                new_dir = os.path.join(path.replace(in_directory, out_directory), dir)
+                if dont_skip_dir(to_skip, new_dir):
+                    os.makedirs(new_dir)
             except FileExistsError:
                 pass
+
+
+def dont_skip_dir(to_skip, target_dir):
+    return all([dir.lower() not in target_dir.lower() for dir in to_skip])
 
 
 def extract_mp3(mp4_path: str) -> np.ndarray:
