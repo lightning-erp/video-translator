@@ -6,3 +6,4 @@
 *.txt
 !requirements.txt
 **/.pytest_cache
+*.log

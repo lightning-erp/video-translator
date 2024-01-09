@@ -6,7 +6,6 @@ import ffmpeg
 import numpy as np
 from pydub import AudioSegment
 from scipy.io import wavfile
-from pathlib import Path
 
 
 def numpy_to_pydub_audiosegment(input: np.ndarray, sample_rate: int) -> AudioSegment:
@@ -48,7 +47,7 @@ def add_audio_to_video(
     timestamps: list[int],
     input_file: str,
     output_file: str,
-) -> None:
+) -> int:
     assert len(audios) == len(timestamps)
     video_length = get_video_length(input_file)
     base_audio = AudioSegment.silent(duration=video_length)
@@ -72,3 +71,4 @@ def add_audio_to_video(
         filter_complex=filter_complex,
     ).run(input=audio_bytes.read())
     print(f"Video with overlaid audio saved to {output_file}")
+    return video_length
