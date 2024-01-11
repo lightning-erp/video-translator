@@ -1,6 +1,7 @@
+import os
 from datetime import timedelta
 from typing import Union
-import os
+
 from pysrt import SubRipFile, SubRipItem
 
 

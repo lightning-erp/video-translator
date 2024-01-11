@@ -4,7 +4,8 @@ from datetime import timedelta
 from time import perf_counter
 
 import tts
-from drive_io import copy_directory_structure, dont_skip_dir, extract_mp3, list_videos
+from drive_io import (copy_directory_structure, dont_skip_dir, extract_mp3,
+                      list_videos)
 from subtitles import save_to_srt
 from voice_recognition import transcribe_video
 from voiceover import add_audio_to_video

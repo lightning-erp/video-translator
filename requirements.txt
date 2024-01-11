@@ -5,3 +5,4 @@ openai-whisper
 TTS
 pydub
 librosa
+pysrt

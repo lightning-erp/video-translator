@@ -1,6 +1,6 @@
 # Training Video Translation and Voiceover
 
-Training Video Translation and Voiceover tool based on OpenAI's Whisper for voice recognition, TortoiseTTS for generating text-to-speech and FFmpeg with PyDub for adding the new voice to the existing video.
+Training Video Translation and Voiceover tool based on OpenAI's Whisper for voice recognition, TortoiseTTS for generating text-to-speech and FFmpeg with PyDub for adding the new voice to the existing video. Generates subtitles using PySrt.
 
 
 ## Installation
@@ -15,11 +15,8 @@ Training Video Translation and Voiceover tool based on OpenAI's Whisper for voic
 
 ## Usage
 
-### Executable:
-I will create `.exe` file when the project is finished.
-### Command line:
-1. Move videos or folders with videos in `.mp4` format to `your/installation/folder/videos/in/`. The system can handle nested folders.
-2. Activate the virtual envrionment and run the following command from `your/installation/folder/`:
-    * Windows: `py main.py`
-    * Linix: `python main.py`
-3. Get the ourput videos and subtitles from `your/installation/folder/videos/out/`.
+1. Specify `IN_DIRECTORY`, `OUT_DIRECTORY` and `DIRS_TO_SKIP` (directories containing specified substrings will be skipped).
+2. Activate the virtual environment:
+    * Windows (using powershell): `path/to/venv/sctipts/activate`
+    * Linux: `source /path/to/venv/bin/activate`
+3. Run `py main.py`
