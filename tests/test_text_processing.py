@@ -4,13 +4,8 @@ import sys
 main_folder_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, main_folder_path)
 
-from text_processing import (
-    merge_on_interpunction,
-    merge_repeats,
-    split_acronym,
-    split_acronyms,
-    split_if_acronym,
-)
+from text_processing import (merge_on_interpunction, merge_repeats,
+                             split_acronym, split_acronyms, split_if_acronym)
 
 
 def test_split_acronyms():
@@ -20,6 +15,8 @@ def test_split_acronyms():
     assert (
         split_acronyms(text) == "There is an acronym to split. S L B 1904 . O I S 300 ."
     )
+    text = ""
+    assert split_acronyms(text) == text
 
 
 def test_split_acronym():
@@ -78,6 +75,8 @@ def test_merge_repeats():
         {"text": "Occurs", "start": 4, "end": 5},
     ]
     assert merge_repeats(segments) == expected_merged_segments
+    segments = []
+    assert merge_repeats(segments) == segments
 
 
 def test_merge_on_interpunction():
@@ -97,3 +96,5 @@ def test_merge_on_interpunction():
         {"text": "Whisper identified some of them wrong.", "start": 2, "end": 5},
     ]
     assert merge_on_interpunction(segments) == expected_merged_segments
+    segments = []
+    assert merge_on_interpunction(segments) == []

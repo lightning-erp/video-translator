@@ -1,6 +1,7 @@
 import os
 import shutil
 import sys
+from time import sleep
 
 import pytest
 
@@ -19,9 +20,9 @@ def test_copy_directory_structure_fixture():
         shutil.rmtree(OUT_DIRECTORY)
     except FileNotFoundError:
         pass
-
+    sleep(0.1)
     yield IN_DIRECTORY, OUT_DIRECTORY
-
+    sleep(0.1)
     try:
         shutil.rmtree(OUT_DIRECTORY)
     except FileNotFoundError:

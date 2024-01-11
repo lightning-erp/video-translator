@@ -24,7 +24,10 @@ def split_if_acronym(segment: str) -> str:
 
 
 def merge_repeats(segments: list[dict[str, Union[str, float]]]) -> list[dict]:
-    segments_merged = [segments[0]]
+    try:
+        segments_merged = [segments[0]]
+    except IndexError:
+        return segments
     for segment in segments[1:]:
         if next_segment_text_is_substring(segments_merged[-1], segment):
             segments_merged[-1]["end"] = segment["end"]
@@ -43,7 +46,10 @@ def next_segment_text_is_substring(
 
 def merge_on_interpunction(segments: list[dict[str, Union[str, float]]]) -> list[dict]:
     INTERPUNCTION = ",.?!:"
-    segments_merged = [segments[0]]
+    try:
+        segments_merged = [segments[0]]
+    except IndexError:
+        return segments
     for segment in segments[1:]:
         if segments_merged[-1]["text"].strip()[-1] in INTERPUNCTION:
             segments_merged.append(segment)
