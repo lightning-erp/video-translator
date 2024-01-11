@@ -1,5 +1,6 @@
 import re
 from string import ascii_uppercase
+from typing import Union
 
 
 def split_acronyms(text: str) -> str:
@@ -20,3 +21,21 @@ def split_if_acronym(segment: str) -> str:
         return " ".join(list(segment)).strip()
     else:
         return segment
+
+
+def merge_repeats(segments: list[dict[str, Union[str, float]]]) -> list[dict]:
+    segments_merged = [segments[0]]
+    for segment in segments[1:]:
+        if next_segment_text_is_substring(segments_merged[-1], segment):
+            segments_merged[-1]["end"] = segment["end"]
+        else:
+            segments_merged.append(segment)
+    return segments_merged
+
+
+def next_segment_text_is_substring(
+    last_segment: dict[str, Union[str, float]], segment: dict[str, Union[str, float]]
+):
+    next_segment_text = segment["text"].strip()
+    last_segment_text = last_segment["text"].strip()
+    return last_segment_text[-len(next_segment_text) :] == next_segment_text

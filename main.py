@@ -4,8 +4,10 @@ from datetime import timedelta
 from time import perf_counter
 
 import tts
-from drive_io import copy_directory_structure, dont_skip_dir, extract_mp3, list_videos
+from drive_io import (copy_directory_structure, dont_skip_dir, extract_mp3,
+                      list_videos)
 from subtitles import save_to_srt
+from text_processing import merge_repeats
 from voice_recognition import transcribe_video
 from voiceover import add_audio_to_video
 
@@ -47,7 +49,7 @@ if __name__ == "__main__":
             continue
         mp3 = extract_mp3(in_file_path)
         logging.info("Beggining video transcription")
-        segments = transcribe_video(in_file_path)
+        segments = merge_repeats(transcribe_video(in_file_path))
         logging.info("Beggining .srt generation")
         save_to_srt(
             segments,
