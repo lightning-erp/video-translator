@@ -57,7 +57,6 @@ def add_audio_to_video(
     audio_bytes = load_wav_to_buffer(base_audio)
     video = ffmpeg.input(input_file)
     audio = ffmpeg.input("pipe:0", format="wav", thread_queue_size=512)
-    filter_complex = "[0:a][1:a]amix=inputs=2:duration=longest[aout]"
     output_file_dir = os.path.dirname(output_file)
     if not os.path.isdir(output_file_dir):
         os.makedirs(output_file_dir)
@@ -67,8 +66,6 @@ def add_audio_to_video(
         output_file,
         vcodec="copy",
         acodec="aac",
-        map="[aout]",
-        filter_complex=filter_complex,
     ).run(input=audio_bytes.read())
     print(f"Video with new audio saved to {output_file}")
     return video_length

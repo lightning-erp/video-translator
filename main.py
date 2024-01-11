@@ -4,9 +4,9 @@ from datetime import timedelta
 from time import perf_counter
 
 import tts
-from drive_io import copy_directory_structure, dont_skip_dir, extract_mp3, list_videos
+from drive_io import copy_directory_structure, dont_skip_dir, list_videos
 from subtitles import save_to_srt
-from text_processing import merge_repeats
+from text_processing import merge_repeats, merge_on_interpunction
 from voice_recognition import VoiceRecognition
 from voiceover import add_audio_to_video
 
@@ -16,8 +16,8 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s:%(message)s",
 )
 
-IN_DIRECTORY = "D:/Lightning videos/Szkolenia/M3 Supply chain/"
-OUT_DIRECTORY = "D:/Lightning videos/Trainings/M3 Supply chain/"
+IN_DIRECTORY = "D:/Lightning videos/Szkolenia/M3 Supply chain"
+OUT_DIRECTORY = "D:/Lightning videos/Trainings/M3 Supply chain"
 DIRS_TO_SKIP = ["subtitles", "source"]
 TTS_SPEED = 1.2
 WHISPER_SIZE = "large"
@@ -53,8 +53,10 @@ if __name__ == "__main__":
             logging.info(f"{out_file_path} already exists, skipping file")
             continue
         logging.info("Beggining video transcription")
-        segments = merge_repeats(
-            whisper.transcribe_video(in_file_path, language=LANGUAGE, task=TASK)
+        segments = merge_on_interpunction(
+            merge_repeats(
+                whisper.transcribe_video(in_file_path, language=LANGUAGE, task=TASK)
+            )
         )
         logging.info("Beggining .srt generation")
         save_to_srt(
