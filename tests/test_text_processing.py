@@ -4,8 +4,13 @@ import sys
 main_folder_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, main_folder_path)
 
-from text_processing import (merge_on_interpunction, merge_repeats,
-                             split_acronym, split_acronyms, split_if_acronym)
+from text_processing import (
+    merge_on_interpunction,
+    merge_repeats,
+    split_acronym,
+    split_acronyms,
+    split_if_acronym,
+)
 
 
 def test_split_acronyms():

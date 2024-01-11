@@ -75,12 +75,16 @@ if __name__ == "__main__":
             for segment in segments
         ]
         logging.info("Beggining adding audio to video")
-        video_length = add_audio_to_video(
-            *zip(*audios_with_timestamps),
-            in_file_path,
-            out_file_path,
-        )
+        if audios_with_timestamps:
+            video_length = add_audio_to_video(
+                *zip(*audios_with_timestamps),
+                in_file_path,
+                out_file_path,
+            )
+            logging.info(
+                f"Translation and voiceover for {out_file_path} [{str(timedelta(milliseconds=video_length))}] took {str(timedelta(seconds=end-start))}"
+            )
+        else:
+            logging.info(f"No speech detected in {in_file_path}.")
+            print("No speech detected")
         end = perf_counter()
-        logging.info(
-            f"Translation and voiceover for {out_file_path} [{str(timedelta(milliseconds=video_length))}] took {str(timedelta(seconds=end-start))}"
-        )
