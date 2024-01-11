@@ -16,8 +16,8 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s:%(message)s",
 )
 
-IN_DIRECTORY = "tests/"
-OUT_DIRECTORY = "tests/out/"
+IN_DIRECTORY = "D:/Lightning videos/Szkolenia/M3 Supply chain/"
+OUT_DIRECTORY = "D:/Lightning videos/Trainings/M3 Supply chain/"
 DIRS_TO_SKIP = ["subtitles", "source"]
 TTS_SPEED = 1.2
 WHISPER_SIZE = "large"
