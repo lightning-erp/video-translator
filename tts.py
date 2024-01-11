@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import torch
 from TTS.api import TTS
+from text_processing import split_acronyms
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 if device != "cuda":
@@ -28,7 +29,11 @@ def synthesize(
     **kwargs
 ) -> tuple[int, np.ndarray]:
     wav = tts.tts(
-        text=text, voice_dir=voice_dir, speaker=speaker, speed=speed, **kwargs
+        text=split_acronyms(text),
+        voice_dir=voice_dir,
+        speaker=speaker,
+        speed=speed,
+        **kwargs
     )
     sample_rate = 24000  # TODO: get from tts model
     if torch.is_tensor(wav):

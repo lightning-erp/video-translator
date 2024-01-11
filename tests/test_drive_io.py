@@ -22,6 +22,11 @@ def test_copy_directory_structure_fixture():
 
     yield IN_DIRECTORY, OUT_DIRECTORY
 
+    try:
+        shutil.rmtree(OUT_DIRECTORY)
+    except FileNotFoundError:
+        pass
+
 
 def test_copy_directory_structure_no_skip(test_copy_directory_structure_fixture):
     in_directory, out_directory = test_copy_directory_structure_fixture
