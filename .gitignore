@@ -3,6 +3,7 @@
 *.wav
 *.mp3
 *.mp4
+!tests/test.mp4
 *.txt
 !requirements.txt
 **/.pytest_cache
