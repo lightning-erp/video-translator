@@ -20,8 +20,9 @@ logging.basicConfig(
 IN_DIRECTORY = "D:/Lightning videos/Szkolenia/M3 Supply chain/"
 OUT_DIRECTORY = "D:/Lightning videos/Trainings/M3 Supply chain/"
 DIRS_TO_SKIP = ["subtitles", "source"]
-TEXT_KEYS = ["start", "end", "text"]
-DIAG_KEYS = ["avg_logprob", "no_speech_prob"]
+TTS_SPEED = 1.2
+LANGUAGE = "pl"
+TASK = "translate"
 
 
 if __name__ == "__main__":
@@ -49,7 +50,9 @@ if __name__ == "__main__":
             continue
         mp3 = extract_mp3(in_file_path)
         logging.info("Beggining video transcription")
-        segments = merge_repeats(transcribe_video(in_file_path))
+        segments = merge_repeats(
+            transcribe_video(in_file_path, language=LANGUAGE, task=TASK)
+        )
         logging.info("Beggining .srt generation")
         save_to_srt(
             segments,
@@ -58,7 +61,10 @@ if __name__ == "__main__":
         logging.info("Beggining text-to-speech generation")
         MS = 1000
         audios_with_timestamps = [
-            (tts.synthesize(segment["text"], speed=1.2), int(segment["start"] * MS))
+            (
+                tts.synthesize(segment["text"], speed=TTS_SPEED),
+                int(segment["start"] * MS),
+            )
             for segment in segments
         ]
         logging.info("Beggining adding audio to video")
