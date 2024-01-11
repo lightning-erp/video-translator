@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import torch
 from TTS.api import TTS
+
 from text_processing import split_acronyms
 
 device = "cuda" if torch.cuda.is_available() else "cpu"

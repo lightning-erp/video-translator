@@ -19,4 +19,14 @@ Training Video Translation and Voiceover tool based on OpenAI's Whisper for voic
 2. Activate the virtual environment:
     * Windows (using powershell): `path/to/venv/sctipts/activate`
     * Linux: `source /path/to/venv/bin/activate`
-3. Run `py main.py`
+3. Set parameters in `main.py`:
+    * `IN_DIRECTORY` - directory containing input .mp4 files
+    * `OUT_DIRECTORY` - directory containing output .mp4 files
+    * `TTS_SIZE` - size of Whisper model, for available models check [OpenAI's Whisper GitHub README](https://github.com/openai/whisper#available-models-and-languages)
+    * `TTS_SPEED` - speed of synthesised speech (detaulf: 1.0). Going far away from 1 is not recommended.
+    * `DIRS_TO_SKIP` - directories containing substrings lised in this variable will not be processed (optional, `[]` to process all directories)
+    * `LANGUAGE` - language of the input video (optional, `None` to not specify)
+    * `TASK` - task that OpenAI's Whisper is supposed to perform (optional, `None` to not specify)
+    * `INPUT_LANGUAGE_INDICATOR` - part of filename to replace (optional, `""` to not replace)
+    * `OUTPUT_LANGUAGE_INDICATOR` - string to replace with (optional, `""` to not replace)
+4. Run `py main.py`.

@@ -70,5 +70,5 @@ def add_audio_to_video(
         map="[aout]",
         filter_complex=filter_complex,
     ).run(input=audio_bytes.read())
-    print(f"Video with overlaid audio saved to {output_file}")
+    print(f"Video with new audio saved to {output_file}")
     return video_length

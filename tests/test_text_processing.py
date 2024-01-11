@@ -5,6 +5,7 @@ main_folder_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, main_folder_path)
 
 from text_processing import (
+    merge_on_interpunction,
     merge_repeats,
     split_acronym,
     split_acronyms,
@@ -77,3 +78,22 @@ def test_merge_repeats():
         {"text": "Occurs", "start": 4, "end": 5},
     ]
     assert merge_repeats(segments) == expected_merged_segments
+
+
+def test_merge_on_interpunction():
+    segments = [
+        {"text": "No broken sentences.", "start": 0, "end": 1},
+        {"text": "Whisper identified it all correctly, ", "start": 2, "end": 3},
+        {"text": "so nothing will change.", "start": 4, "end": 5},
+    ]
+    assert merge_on_interpunction(segments) == segments
+    segments = [
+        {"text": "There are broken sentences.", "start": 0, "end": 1},
+        {"text": "Whisper identified some ", "start": 2, "end": 3},
+        {"text": " of them wrong.", "start": 4, "end": 5},
+    ]
+    expected_merged_segments = [
+        {"text": "There are broken sentences.", "start": 0, "end": 1},
+        {"text": "Whisper identified some of them wrong.", "start": 2, "end": 5},
+    ]
+    assert merge_on_interpunction(segments) == expected_merged_segments

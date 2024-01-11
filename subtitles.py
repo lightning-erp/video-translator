@@ -14,16 +14,13 @@ def save_to_srt(transctipt: list[dict[str, Union[float, str]]], output: str):
     except FileNotFoundError:
         output_file_path = "/".join(output_file.split("/")[:-1])
         os.makedirs(output_file_path)
-    print(f"translated transcription saved to {output_file}")
+    print(f"Translated transcription saved to {output_file}")
 
 
 def create_subripitem(segment: dict[str, Union[float, str]]) -> SubRipItem:
-    print(segment)
     start = seconds_to_hms(segment["start"])
     end = seconds_to_hms(segment["end"])
     text = segment["text"]
-    print(start, end)
-    print(segment["start"], segment["end"])
 
     return SubRipItem(start=start, end=end, text=text)
 
