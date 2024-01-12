@@ -2,6 +2,9 @@
 
 Training Video Translation and Voiceover tool based on OpenAI's Whisper for voice recognition, TortoiseTTS for generating text-to-speech and FFmpeg with PyDub for adding the new voice to the existing video. Generates subtitles using PySrt.
 
+## Requirements
+
+To run this a strong GPU is strongly recommended - otherwise the process will be **extremely** slow. When using `large` Whisper the program requires ~13.5 GB of VRAM.
 
 ## Installation
 
