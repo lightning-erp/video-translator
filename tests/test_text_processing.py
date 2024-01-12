@@ -5,11 +5,13 @@ main_folder_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, main_folder_path)
 
 from text_processing import (
+    add_missing_interpunction,
     merge_on_interpunction,
     merge_repeats,
     split_acronym,
     split_acronyms,
     split_if_acronym,
+    split_on_interpunction,
 )
 
 
@@ -103,3 +105,56 @@ def test_merge_on_interpunction():
     assert merge_on_interpunction(segments) == expected_merged_segments
     segments = []
     assert merge_on_interpunction(segments) == []
+
+
+def test_add_missing_interpunction():
+    segment = {
+        "text": "No missing interpunction.",
+        "start": 0,
+        "end": 11,
+    }
+    assert add_missing_interpunction(segment) == segment
+    segment = {
+        "text": "There is missing interpunction Therefore it will be fixed.",
+        "start": 0,
+        "end": 11,
+    }
+    expected_segment = {
+        "text": "There is missing interpunction, Therefore it will be fixed.",
+        "start": 0,
+        "end": 11,
+    }
+    assert add_missing_interpunction(segment) == expected_segment
+
+
+def test_split_on_interpunction():
+    segments = [
+        {
+            "text": "No missing interpunction.",
+            "start": 0,
+            "end": 11,
+        }
+    ]
+    assert split_on_interpunction(segments) == segments
+    segments = [
+        {
+            "text": "There is missing interpunction Therefore it will be fixed.",
+            "start": 0,
+            "end": 11,
+        }
+    ]
+    expected_split_segments = [
+        {
+            "text": "There is missing interpunction,",
+            "start": 0,
+            "end": 6.3,
+        },
+        {
+            "text": "Therefore it will be fixed.",
+            "start": 6.3,
+            "end": 10.95,
+        },
+    ]
+    assert split_on_interpunction(segments) == expected_split_segments
+    segments = []
+    assert split_on_interpunction(segments) == segments

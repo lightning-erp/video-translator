@@ -2,6 +2,10 @@ import re
 from string import ascii_uppercase
 from typing import Union
 
+import phonetics
+
+INTERPUNCTION = ",.?!:"
+
 
 def split_acronyms(text: str) -> str:
     words = [split_acronym(word) for word in text.split()]
@@ -45,7 +49,6 @@ def next_segment_text_is_substring(
 
 
 def merge_on_interpunction(segments: list[dict[str, Union[str, float]]]) -> list[dict]:
-    INTERPUNCTION = ",.?!:"
     try:
         segments_merged = [segments[0]]
     except IndexError:
@@ -59,3 +62,53 @@ def merge_on_interpunction(segments: list[dict[str, Union[str, float]]]) -> list
             ] = f"{segments_merged[-1]['text'].strip()} {segment['text'].strip()}"
             segments_merged[-1]["end"] = segment["end"]
     return segments_merged
+
+
+def split_on_interpunction(segments: list[dict[str, Union[str, float]]]) -> list[dict]:
+    split_segments = list()
+    for segment in segments:
+        segment_with_interpunction = add_missing_interpunction(segment)
+        segment_speech_length = len(
+            phonetics.metaphone(segment_with_interpunction["text"])
+        )
+        all_speech_length = segment["end"] - segment["start"]
+        new_texts: list[str] = re.findall(
+            r"[^.,\-:]+(?:[.,\-:]|\b)", segment_with_interpunction["text"]
+        )
+        subsegment_speech_length = len(phonetics.metaphone(new_texts[0]))
+        subsegments = [
+            {
+                "text": new_texts[0],
+                "start": segment["start"],
+                "end": round(
+                    segment["start"]
+                    + (subsegment_speech_length / segment_speech_length)
+                    * all_speech_length,
+                    1,
+                ),
+            }
+        ]
+        for text in new_texts[1:]:
+            text_sounds = len(phonetics.metaphone(text))
+            subsegment_speech_length = round(
+                (text_sounds / segment_speech_length) * all_speech_length, 2
+            )
+            subsegments.append(
+                {
+                    "text": text.strip(),
+                    "start": subsegments[-1]["end"],
+                    "end": subsegments[-1]["end"] + subsegment_speech_length,
+                }
+            )
+        split_segments.extend(subsegments)
+
+    return split_segments
+
+
+def add_missing_interpunction(segment: dict[str, Union[str, float]]) -> dict:
+    whitespace_uppercase_lowercase = r"(\s)([A-Z][a-z])"
+    dot_before_whitespacee = r",\1\2"
+    new_text = re.sub(
+        whitespace_uppercase_lowercase, dot_before_whitespacee, segment["text"]
+    )
+    return {"text": new_text, "start": segment["start"], "end": segment["end"]}
