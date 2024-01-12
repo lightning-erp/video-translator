@@ -132,7 +132,7 @@ def test_split_on_interpunction():
         {
             "text": "No missing interpunction.",
             "start": 0,
-            "end": 11,
+            "end": 3,
         }
     ]
     assert split_on_interpunction(segments) == segments
@@ -152,9 +152,29 @@ def test_split_on_interpunction():
         {
             "text": "Therefore it will be fixed.",
             "start": 6.3,
-            "end": 10.95,
+            "end": 11,
         },
     ]
     assert split_on_interpunction(segments) == expected_split_segments
     segments = []
     assert split_on_interpunction(segments) == segments
+    segments = [
+        {
+            "text": "There is proper interpunction, therefore it will be not be changed.",
+            "start": 0,
+            "end": 11,
+        }
+    ]
+    expected_split_segments = [
+        {
+            "text": "There is proper interpunction,",
+            "start": 0,
+            "end": 5.7,
+        },
+        {
+            "text": "therefore it will be not be changed.",
+            "start": 5.7,
+            "end": 11,
+        },
+    ]
+    assert split_on_interpunction(segments) == expected_split_segments

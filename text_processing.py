@@ -68,41 +68,51 @@ def split_on_interpunction(segments: list[dict[str, Union[str, float]]]) -> list
     split_segments = list()
     for segment in segments:
         segment_with_interpunction = add_missing_interpunction(segment)
-        segment_speech_length = len(
+        segment_sounds_length = len(
             phonetics.metaphone(segment_with_interpunction["text"])
         )
-        all_speech_length = segment["end"] - segment["start"]
+        if segment_sounds_length == 0:
+            split_segments.append(segment)
+            continue
+        segment_length = segment["end"] - segment["start"]
         new_texts: list[str] = re.findall(
             r"[^.,\-:]+(?:[.,\-:]|\b)", segment_with_interpunction["text"]
         )
-        subsegment_speech_length = len(phonetics.metaphone(new_texts[0]))
+
+        subsegment_length = get_subsegment_length(
+            segment_sounds_length, segment_length, new_texts[0]
+        )
         subsegments = [
             {
                 "text": new_texts[0],
                 "start": segment["start"],
                 "end": round(
-                    segment["start"]
-                    + (subsegment_speech_length / segment_speech_length)
-                    * all_speech_length,
+                    segment["start"] + subsegment_length,
                     1,
                 ),
             }
         ]
         for text in new_texts[1:]:
-            text_sounds = len(phonetics.metaphone(text))
-            subsegment_speech_length = round(
-                (text_sounds / segment_speech_length) * all_speech_length, 2
+            subsegment_length = get_subsegment_length(
+                segment_sounds_length, segment_length, text
             )
             subsegments.append(
                 {
                     "text": text.strip(),
                     "start": subsegments[-1]["end"],
-                    "end": subsegments[-1]["end"] + subsegment_speech_length,
+                    "end": subsegments[-1]["end"] + subsegment_length,
                 }
             )
         split_segments.extend(subsegments)
 
     return split_segments
+
+
+def get_subsegment_length(segment_sounds_length, segment_length, text):
+    text_sounds = len(phonetics.metaphone(text))
+    subsegment_length = round((text_sounds / segment_sounds_length) * segment_length, 1)
+
+    return subsegment_length
 
 
 def add_missing_interpunction(segment: dict[str, Union[str, float]]) -> dict:

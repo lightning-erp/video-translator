@@ -30,5 +30,7 @@ class VoiceRecognition:
         return [
             {key: value for key, value in segment.items() if key in TEXT_KEYS}
             for segment in segments
-            if segment["text"].strip() != "..." and segment["text"].strip() != "."
+            if segment["text"].strip() != "..."
+            and segment["text"].strip() != "."
+            and segment["text"].strip()
         ]
