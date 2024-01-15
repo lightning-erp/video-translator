@@ -54,7 +54,10 @@ def merge_on_interpunction(segments: list[dict[str, Union[str, float]]]) -> list
     except IndexError:
         return segments
     for segment in segments[1:]:
-        if segments_merged[-1]["text"].strip()[-1] in INTERPUNCTION:
+        if (
+            segments_merged[-1]["text"].strip()[-1] in INTERPUNCTION
+            or len(segments_merged[-1]["text"].strip().split()) > 50
+        ):
             segments_merged.append(segment)
         else:
             segments_merged[-1][

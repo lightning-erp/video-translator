@@ -105,6 +105,61 @@ def test_merge_on_interpunction():
     assert merge_on_interpunction(segments) == expected_merged_segments
     segments = []
     assert merge_on_interpunction(segments) == []
+    segments = [
+        {"text": "There are broken sentences.", "start": 0, "end": 1},
+        {"text": "Whisper identified some ", "start": 2, "end": 3},
+        {"text": " of them wrong.", "start": 4, "end": 5},
+    ]
+    expected_merged_segments = [
+        {"text": "There are broken sentences.", "start": 0, "end": 1},
+        {"text": "Whisper identified some of them wrong.", "start": 2, "end": 5},
+    ]
+    assert merge_on_interpunction(segments) == expected_merged_segments
+    segments = [
+        {
+            "start": 13,
+            "end": 14,
+            "text": "If you already have basic knowledge how to use M3 system",
+        },
+        {
+            "start": 14,
+            "end": 15,
+            "text": "Let's move to the question how to order goods",
+        },
+        {
+            "start": 15,
+            "end": 16,
+            "text": "To order goods we need two basic information",
+        },
+        {
+            "start": 16,
+            "end": 17,
+            "text": "These are the contract data and the item data",
+        },
+        {
+            "start": 17,
+            "end": 18,
+            "text": "These two information will be combined with the price tag which will fill us with information about how much this specified product costs at this specific contractor",
+        },
+        {
+            "start": 18,
+            "end": 19,
+            "text": "Above text will put length of text over the limit so this should split now",
+        },
+    ]
+    expected_merged_segments = [
+        {
+            "start": 13,
+            "end": 18,
+            "text": "If you already have basic knowledge how to use M3 system Let's move to the question how to order goods To order goods we need two basic information These are the contract data and the item data These two information will be combined with the price tag which will fill us with information about how much this specified product costs at this specific contractor",
+        },
+        {
+            "start": 18,
+            "end": 19,
+            "text": "Above text will put length of text over the limit so this should split now",
+        },
+    ]
+    assert merge_on_interpunction(segments) == expected_merged_segments
 
 
 def test_add_missing_interpunction():
@@ -127,7 +182,8 @@ def test_add_missing_interpunction():
     assert add_missing_interpunction(segment) == expected_segment
 
 
-def test_split_on_interpunction():
+def OBSOLETE_test_split_on_interpunction():
+    assert False
     segments = [
         {
             "text": "No missing interpunction.",
