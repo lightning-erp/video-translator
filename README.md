@@ -18,11 +18,10 @@ To run this a strong GPU is strongly recommended - otherwise the process will be
 
 ## Usage
 
-1. Specify `IN_DIRECTORY`, `OUT_DIRECTORY` and `DIRS_TO_SKIP` (directories containing specified substrings will be skipped).
-2. Activate the virtual environment:
+1. Activate the virtual environment:
     * Windows (using powershell): `path/to/venv/sctipts/activate`
     * Linux: `source /path/to/venv/bin/activate`
-3. Set parameters in `main.py`:
+2. Set parameters in `main.py`:
     * `IN_DIRECTORY` - directory containing input .mp4 files
     * `OUT_DIRECTORY` - directory containing output .mp4 files
     * `TTS_SIZE` - size of Whisper model, for available models check [OpenAI's Whisper GitHub README](https://github.com/openai/whisper#available-models-and-languages)
@@ -32,4 +31,4 @@ To run this a strong GPU is strongly recommended - otherwise the process will be
     * `TASK` - task that OpenAI's Whisper is supposed to perform (optional, `None` to not specify)
     * `INPUT_LANGUAGE_INDICATOR` - part of filename to replace (optional, `""` to not replace)
     * `OUTPUT_LANGUAGE_INDICATOR` - string to replace with (optional, `""` to not replace)
-4. Run `py main.py`.
+3. Run `py main.py`.
