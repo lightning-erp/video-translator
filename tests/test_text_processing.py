@@ -84,9 +84,36 @@ def test_merge_repeats():
     assert merge_repeats(segments) == expected_merged_segments
     segments = []
     assert merge_repeats(segments) == segments
+    segments = [
+        {
+            "text": "The OIS302 application is a very useful application.",
+            "start": 0,
+            "end": 1,
+        },
+        {
+            "text": "We can see that the OIS302 application is a very useful application.",
+            "start": 1,
+            "end": 2,
+        },
+        {
+            "text": "The OIS302 application is a very useful application.",
+            "start": 3,
+            "end": 4,
+        },
+    ]
+    expected_merged_segments = [
+        {
+            "text": "We can see that the OIS302 application is a very useful application.",
+            "start": 0,
+            "end": 4,
+        },
+    ]
+    assert merge_repeats(segments) == expected_merged_segments
 
 
 def test_merge_on_interpunction():
+    segments = []
+    assert merge_on_interpunction([]) == []
     segments = [
         {"text": "No broken sentences.", "start": 0, "end": 1},
         {"text": "Whisper identified it all correctly, ", "start": 2, "end": 3},

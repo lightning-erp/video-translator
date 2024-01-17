@@ -58,13 +58,9 @@ if __name__ == "__main__":
                 logging.info(f"{out_file_path} already exists, skipping file")
                 continue
             logging.info("Beggining video transcription")
-            segments = split_on_interpunction(
-                merge_on_interpunction(
-                    merge_repeats(
-                        whisper.transcribe_video(
-                            in_file_path, language=LANGUAGE, task=TASK
-                        )
-                    )
+            segments = merge_on_interpunction(
+                merge_repeats(
+                    whisper.transcribe_video(in_file_path, language=LANGUAGE, task=TASK)
                 )
             )
             logging.info("Beggining .srt generation")

@@ -33,19 +33,27 @@ def merge_repeats(segments: list[dict[str, Union[str, float]]]) -> list[dict]:
     except IndexError:
         return segments
     for segment in segments[1:]:
-        if next_segment_text_is_substring(segments_merged[-1], segment):
+        if segment_text_is_substring(segments_merged[-1], segment):
             segments_merged[-1]["end"] = segment["end"]
+            segments_merged[-1]["text"] = (
+                segments_merged[-1]["text"]
+                if len(segments_merged[-1]["text"]) > len(segment["text"])
+                else segment["text"]
+            )
         else:
             segments_merged.append(segment)
     return segments_merged
 
 
-def next_segment_text_is_substring(
+def segment_text_is_substring(
     last_segment: dict[str, Union[str, float]], segment: dict[str, Union[str, float]]
 ):
-    next_segment_text = segment["text"].strip()
-    last_segment_text = last_segment["text"].strip()
-    return last_segment_text[-len(next_segment_text) :] == next_segment_text
+    next_segment_text = segment["text"].strip().lower()
+    last_segment_text = last_segment["text"].strip().lower()
+    return (
+        last_segment_text[-len(next_segment_text) :] == next_segment_text
+        or next_segment_text[-len(last_segment_text) :] == last_segment_text
+    )
 
 
 def merge_on_interpunction(segments: list[dict[str, Union[str, float]]]) -> list[dict]:
