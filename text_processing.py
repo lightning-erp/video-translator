@@ -126,6 +126,12 @@ def get_subsegment_length(segment_sounds_length, segment_length, text):
     return subsegment_length
 
 
+def add_missing_interpunctions(
+    segments: list[dict[str, Union[str, float]]]
+) -> list[dict]:
+    return [add_missing_interpunction(segment) for segment in segments]
+
+
 def add_missing_interpunction(segment: dict[str, Union[str, float]]) -> dict:
     whitespace_uppercase_lowercase = r"(\s)([A-Z][a-z])"
     dot_before_whitespacee = r",\1\2"

@@ -6,6 +6,7 @@ sys.path.insert(0, main_folder_path)
 
 from text_processing import (
     add_missing_interpunction,
+    add_missing_interpunctions,
     merge_on_interpunction,
     merge_repeats,
     split_acronym,
@@ -187,6 +188,32 @@ def test_merge_on_interpunction():
         },
     ]
     assert merge_on_interpunction(segments) == expected_merged_segments
+
+
+def test_add_missing_interpunctions():
+    segments = [
+        {
+            "text": "No missing interpunction.",
+            "start": 0,
+            "end": 11,
+        }
+    ]
+    assert add_missing_interpunctions(segments) == segments
+    segments = [
+        {
+            "text": "There is missing interpunction Therefore it will be fixed.",
+            "start": 0,
+            "end": 11,
+        }
+    ]
+    expected_segments = [
+        {
+            "text": "There is missing interpunction, Therefore it will be fixed.",
+            "start": 0,
+            "end": 11,
+        }
+    ]
+    assert add_missing_interpunctions(segments) == expected_segments
 
 
 def test_add_missing_interpunction():

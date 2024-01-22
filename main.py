@@ -61,15 +61,12 @@ if __name__ == "__main__":
                 logging.info(f"{out_file_path} already exists, skipping file")
                 continue
             logging.info("Beggining video transcription")
-            segments = add_missing_interpunction(
-                merge_on_interpunction(
-                    merge_repeats(
-                        whisper.transcribe_video(
-                            in_file_path, language=LANGUAGE, task=TASK
-                        )
-                    )
+            segments = merge_on_interpunction(
+                merge_repeats(
+                    whisper.transcribe_video(in_file_path, language=LANGUAGE, task=TASK)
                 )
             )
+
             logging.info("Beggining .srt generation")
             save_to_srt(
                 segments,
@@ -103,3 +100,4 @@ if __name__ == "__main__":
 
     except Exception as e:
         logging.error(f"Exception occured: {e}")
+        raise e
