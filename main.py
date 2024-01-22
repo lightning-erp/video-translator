@@ -9,7 +9,7 @@ from subtitles import save_to_srt
 from text_processing import (
     merge_repeats,
     merge_on_interpunction,
-    split_on_interpunction,
+    add_missing_interpunction,
 )
 from voice_recognition import VoiceRecognition
 from voiceover import add_audio_to_video
@@ -25,7 +25,6 @@ OUT_DIRECTORY = "D:/Lightning videos/Trainings/M3 Supply chain"
 DIRS_TO_SKIP = [
     "subtitles",
     "source",
-    "Szkolenie M3 Logistyka blok 2 - Podstawowe dane",
 ]
 TTS_SPEED = 1.2
 WHISPER_SIZE = "large"
@@ -62,9 +61,13 @@ if __name__ == "__main__":
                 logging.info(f"{out_file_path} already exists, skipping file")
                 continue
             logging.info("Beggining video transcription")
-            segments = merge_on_interpunction(
-                merge_repeats(
-                    whisper.transcribe_video(in_file_path, language=LANGUAGE, task=TASK)
+            segments = add_missing_interpunction(
+                merge_on_interpunction(
+                    merge_repeats(
+                        whisper.transcribe_video(
+                            in_file_path, language=LANGUAGE, task=TASK
+                        )
+                    )
                 )
             )
             logging.info("Beggining .srt generation")
