@@ -22,7 +22,11 @@ logging.basicConfig(
 
 IN_DIRECTORY = "D:/Lightning videos/Szkolenia/M3 Supply chain"
 OUT_DIRECTORY = "D:/Lightning videos/Trainings/M3 Supply chain"
-DIRS_TO_SKIP = ["subtitles", "source"]
+DIRS_TO_SKIP = [
+    "subtitles",
+    "source",
+    "Szkolenie M3 Logistyka blok 2 - Podstawowe dane",
+]
 TTS_SPEED = 1.2
 WHISPER_SIZE = "large"
 LANGUAGE = "pl"
@@ -86,12 +90,13 @@ if __name__ == "__main__":
                     in_file_path,
                     out_file_path,
                 )
+                end = perf_counter()
                 logging.info(
                     f"Translation and voiceover for {out_file_path} [{str(timedelta(milliseconds=video_length))}] took {str(timedelta(seconds=end-start))}"
                 )
             else:
                 logging.info(f"No speech detected in {in_file_path}.")
                 print("No speech detected")
-            end = perf_counter()
+
     except Exception as e:
         logging.error(f"Exception occured: {e}")
