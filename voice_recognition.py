@@ -8,6 +8,8 @@ DIAG_KEYS = ["avg_logprob", "no_speech_prob"]
 
 
 class VoiceRecognition:
+    supported_languages = set(whisper.tokenizer.LANGUAGES.keys())
+
     def __init__(self, model_size: str):
         self.model = whisper.load_model(model_size)
 

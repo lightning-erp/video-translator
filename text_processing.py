@@ -2,8 +2,6 @@ import re
 from string import ascii_uppercase
 from typing import Union
 
-import phonetics
-
 INTERPUNCTION = ",.?!:"
 
 
